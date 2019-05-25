@@ -28,10 +28,12 @@ app.post("/create", bodyParser.urlencoded({extended: false}), async (req, res) =
             seed: +seed || 123,
         })
     });
-    if (r.status === 200) {
+    if (Math.floor(r.status / 100) === 2) {
         res.redirect("/explore/" + name);
     } else {
-        res.send(await r.text());
+        let text = await r.text();
+        console.log(new Date(), "error", r.status, text);
+        res.send(text);
     }
 });
 
