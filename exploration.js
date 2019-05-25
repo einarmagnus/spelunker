@@ -38,7 +38,7 @@ async function cookieExploration() {
             body: JSON.stringify({ xid })
         })
         cookie = r.headers.get("Set-Cookie");
-        console.log("entered", await r.json()); 
+        console.log("entered", await r.json());
     }
 
     console.log("FORK!")
@@ -48,7 +48,7 @@ async function cookieExploration() {
     for (let i = 0; i < 2; i++) {
         let xid1 = path2a[i];
         let xid2 = path2b[i];
-        
+
         r = await fetch(url, {
             method: "put",
             headers: {
@@ -57,7 +57,7 @@ async function cookieExploration() {
             },
             body: JSON.stringify({ xid: xid1 })
         })
-        console.log("enteredA", xid1, r.status,  await r.text()); 
+        console.log("enteredA", xid1, r.status,  await r.text());
         cookies.a = r.headers.get("Set-Cookie");
         r = await fetch(url, {
             method: "put",
@@ -67,7 +67,7 @@ async function cookieExploration() {
             },
             body: JSON.stringify({ xid: xid2 })
         })
-        console.log("enteredB", xid2,  r.status, await r.text()); 
+        console.log("enteredB", xid2,  r.status, await r.text());
         cookies.b = r.headers.get("Set-Cookie");
 
     }

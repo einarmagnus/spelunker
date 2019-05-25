@@ -48,7 +48,7 @@ app.get("/explore/:name/stream", async (req, res) => {
     res.write("\n");
     try {
         const explorer = spelunker(name, relayRoom);
-        
+
         let id = 0;
         function relayRoom(room) {
             res.write(`data: ${JSON.stringify(room)}\n`);

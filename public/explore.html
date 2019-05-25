@@ -9,18 +9,18 @@
     <script>
         function explore() {
             let pathExtraction = /explore\/(.*)$/.exec(location);
-            
-            let name = pathExtraction && pathExtraction[1] 
+
+            let name = pathExtraction && pathExtraction[1]
                     || prompt("What message do you want to read?");
 
             let exploration = new EventSource("/explore/" + name + "/stream");
-            let visualize = Visualizer(); 
+            let visualize = Visualizer();
             exploration.onmessage = ({data}) => visualize(JSON.parse(data));
-            exploration.addEventListener("done", () => { 
+            exploration.addEventListener("done", () => {
                 console.log("closed");
                 exploration.close()
             });
-            exploration.addEventListener("error", () => { 
+            exploration.addEventListener("error", () => {
                 console.log("error");
                 exploration.close()
             });

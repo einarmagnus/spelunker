@@ -2,7 +2,7 @@
  * A position with x and y values
  * @typedef {Object} Pos
  * @property {number} x the x position
- * @property {number} y the y position  
+ * @property {number} y the y position
  */
 /**
  * A Room to be visualized
@@ -11,13 +11,13 @@
  * @property {string} col the color of this room in html hex form
  * @property {Pos} pos The position of the rooom
  * @property {string[]} see an array of XIDs pointing to this room's neighbours
- *  
+ *
  */
 
 /**
  * Make a visualizer of found rooms.
  * Returns a function to be called with a found room which will be drawn.
- * 
+ *
  * @param {number} initialScale the scale to start with
  * @returns {(Room) => ()}
  */
@@ -33,7 +33,7 @@ function Visualizer(initialScale = 1000) {
         document.body.style.margin = "0";
         document.body.style.padding = "0";
         document.body.style.overflow= "hidden";
-            
+
         document.body.innerHTML = `
             <canvas width="1" height="1" style="margin: auto; width:100vw; height: 100vh; padding: 0">
         `;
@@ -42,8 +42,8 @@ function Visualizer(initialScale = 1000) {
         canvas.height = height = document.body.scrollHeight - 5;
         canvas.style.width = width + "px";
         canvas.style.height = height + "px";
-        
-        return canvas.getContext("2d");        
+
+        return canvas.getContext("2d");
     }
     let ctx = setupUI();
 
@@ -58,14 +58,14 @@ function Visualizer(initialScale = 1000) {
     /** the largest y-value found of a room's position */
     let maxHeight = 1;
     let scale = initialScale;
-    /** The scale is adjusted in steps to avoid redrawing the while field 
+    /** The scale is adjusted in steps to avoid redrawing the while field
      *  too often, this is the size of those steps
      */
     let scaleStep = 1;
 
     /**
      * A function that takes a room and draws it
-     * @param {Room} room 
+     * @param {Room} room
      */
     function enteredRoom(room) {
         rooms.all.push(room);
@@ -76,18 +76,18 @@ function Visualizer(initialScale = 1000) {
         draw(room);
     }
     return enteredRoom;
-    
+
     /**
      * Draws a room and makes sure the scale is right to fit all drawn rooms
-     * If the room won't fit, the scale wil be adjusted and all previously 
+     * If the room won't fit, the scale wil be adjusted and all previously
      * drawn rooms will be redrawn
-     * @param {Room} room 
+     * @param {Room} room
      */
     function draw(room) {
-        
+
         ctx.save();
         let size = Math.min(width / (maxWidth + 1), height / (maxHeight + 1));
-        
+
         // if the scale is already good, just draw the room
         if (size >= scale) {
             ctx.scale(scale, scale);
@@ -106,7 +106,7 @@ function Visualizer(initialScale = 1000) {
     /**
      * Draw a room at the current scale
      * Also draws the connections between all found rooms
-     * @param {Room} room 
+     * @param {Room} room
      */
     function drawRoom(room) {
         let {col, see, pos: {x, y}} = room;
@@ -117,18 +117,18 @@ function Visualizer(initialScale = 1000) {
         room.drawn = scale;
         see.forEach(nid => {
             let neighbor = rooms.byId[nid];
-            // redraw connection to neighbour if the neighbour 
+            // redraw connection to neighbour if the neighbour
             // exists && it was already drawn at this scale
             if (neighbor && neighbor.drawn === scale) {
                 drawConnections({x, y}, neighbor.pos);
-            }   
+            }
         });
     }
 
     /**
      * Draw a connection between two points
      * @param {{x: number, y: number}} p1 the first point
-     * @param {{x: number, y: number}} p2 the second point 
+     * @param {{x: number, y: number}} p2 the second point
      */
     function drawConnections({x, y}, {x: nx, y: ny}) {
         // find distance between two points
@@ -140,7 +140,7 @@ function Visualizer(initialScale = 1000) {
         ctx.beginPath();
         ctx.moveTo(0, 0);
         ctx.lineTo(length, 0);
-        ctx.strokeStyle = "#ff000050";        
+        ctx.strokeStyle = "#ff000050";
         ctx.stroke();
         ctx.restore();
     }

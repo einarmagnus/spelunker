@@ -3,7 +3,7 @@ const fetch = require("node-fetch");
  * A position with x and y values
  * @typedef {Object} Pos
  * @property {number} x the x position
- * @property {number} y the y position  
+ * @property {number} y the y position
  */
 /**
  * A Room to be visualized
@@ -12,7 +12,7 @@ const fetch = require("node-fetch");
  * @property {string} col the color of this room in html hex form
  * @property {Pos} pos The position of the rooom
  * @property {string[]} see an array of XIDs pointing to this room's neighbours
- *  
+ *
  */
 
  /**
@@ -24,7 +24,7 @@ const fetch = require("node-fetch");
   * every fork of the road and just serve the cookie from the last room we came from 👨‍💻
   *
   * @param {string} name the name of the message
-  * @param {(Room) => {}} roomFound a function that will be called whenever a new room is found 
+  * @param {(Room) => {}} roomFound a function that will be called whenever a new room is found
   */
 function spelunker(name = "blarf", roomFound = console.log) {
     let abortExploration = false;
@@ -40,8 +40,8 @@ function spelunker(name = "blarf", roomFound = console.log) {
             const url = "https://newrainsoftware.com/brizzo/" + name;
 
             /**
-             * Keep track of where we've already spelunked  
-             * @type {[xid: string]: boolean} 
+             * Keep track of where we've already spelunked
+             * @type {[xid: string]: boolean}
              */
             let map = {};
             map.has = xid => map[xid];
@@ -57,7 +57,7 @@ function spelunker(name = "blarf", roomFound = console.log) {
                 error(new Error(result.statusText));
                 return;
             }
-            const entrance = await result.json(); 
+            const entrance = await result.json();
             // declare we've found a room!
             roomFound(entrance);
             const cookie = result.headers.get("Set-Cookie");
@@ -66,7 +66,7 @@ function spelunker(name = "blarf", roomFound = console.log) {
 
             /**
              * PUT the xid of the room we want to look into, we'll get att it's details as the response
-             * @param {string} xid the xid of the room to PUT 
+             * @param {string} xid the xid of the room to PUT
              * @param {string} cookie the cookie of the previous room (this is where we sneakily cheat)
              */
             async function put(xid, cookie) {
@@ -81,21 +81,21 @@ function spelunker(name = "blarf", roomFound = console.log) {
                         method: "put",
                     });
                     if (result.status === 200) {
-                        return { 
-                            room: await result.json(), 
+                        return {
+                            room: await result.json(),
                             cookie: result.headers.get("Set-Cookie"),
                         };
                     } else {
                         return {
-                            error: true, 
-                            status: result.status, 
+                            error: true,
+                            status: result.status,
                             statusText: result.statusText,
                         };
                     }
                 } catch (e) {
-                    return { 
-                        error: true, 
-                        status: 499, 
+                    return {
+                        error: true,
+                        status: 499,
                         statusText: e.message,
                     };
                 } finally {
@@ -104,7 +104,7 @@ function spelunker(name = "blarf", roomFound = console.log) {
             }
 
             /**
-             * This function looks into a new room and then recursivly explores all its 
+             * This function looks into a new room and then recursivly explores all its
              * neighbouring rooms.
              * @param {string} xid the xid of the room to explore
              * @param {string} prevCookie the cookie from the previous room
@@ -123,12 +123,12 @@ function spelunker(name = "blarf", roomFound = console.log) {
                 // declare that we fond a new room!
                 roomFound(room);
                 map.add(room);
-                // if we've been asked to abort the exploration, 
+                // if we've been asked to abort the exploration,
                 // don't go into any new rooms
                 if (!abortExploration) {
                     room.see.forEach(r => explore(r, cookie));
                 }
-                // if there are no longer any connections open, 
+                // if there are no longer any connections open,
                 // then we're done spelunking
                 if (openRequests === 0) {
                     done();
