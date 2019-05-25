@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="/visualizer.js"></script>
+    <script>
+        function explore() {
+        }
+    </script>
+
+</head>
+<body>
+    <h1>Slow messaging, fast! 🏃‍</h1>
+    <h2>Create a new message:</h2>
+    <form action="/create" method="post">
+        <input type="text" name="name">
+        <input type="hidden" name="shape" value="hex">
+        <input type="hidden" name="seed" value="123"><br>
+        <textarea name="message" placeholder="your message here"></textarea><br>
+        <input type="submit" value="Create">
+    </form>
+    <h2>Explore existing message</h2>
+    <form onsubmit="location='/explore/' + document.querySelector('#name').value;return false">
+        <input id="name" type="text"><input type="submit">
+    </form>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="/visualizer.js"></script>
+    <script>
+        function explore() {
+            let pathExtraction = /explore\/(.*)$/.exec(location);
+            
+            let name = pathExtraction && pathExtraction[1] 
+                    || prompt("What message do you want to read?");
+
+            let exploration = new EventSource("/explore/" + name + "/stream");
+            let visualize = Visualizer(); 
+            exploration.onmessage = ({data}) => visualize(JSON.parse(data));
+            exploration.addEventListener("done", () => { 
+                console.log("closed");
+                exploration.close()
+            });
+            exploration.addEventListener("error", () => { 
+                console.log("error");
+                exploration.close()
+            });
+        }
+    </script>
+
+</head>
+<body onload="explore()">
+</body>
+</html>
