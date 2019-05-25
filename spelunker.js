@@ -18,11 +18,11 @@ const fetch = require("node-fetch");
  /**
   * Start a spelunker exploring the labyrinthine message of the given name.
   * Whenever a new room is found the `roomFound` method will be called with it.
-  * 
-  * It turns out the server does not use the cookie we get to kep state but only to see where 
-  * last came from. Thus we can cheat by splitting into multiple spelunkers in 
-  * every fork of the road and just serve the cookie from the last room we came from
-  * 
+  *
+  * It turns out the server does not use the cookie we get to keep state but only to see where
+  * we last came from. Thus we can cheat by splitting into multiple spelunkers in
+  * every fork of the road and just serve the cookie from the last room we came from 👨‍💻
+  *
   * @param {string} name the name of the message
   * @param {(Room) => {}} roomFound a function that will be called whenever a new room is found 
   */
