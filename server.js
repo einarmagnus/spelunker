@@ -33,7 +33,15 @@ app.post("/create", bodyParser.urlencoded({extended: false}), async (req, res) =
     } else {
         let text = await r.text();
         console.log(new Date(), "error", r.status, text);
-        res.send(text);
+        res.status(r.status).send(`
+        <html><head></head>
+        <body>
+        <h1>${r.status} - ${r.statusText}</h1>
+        <pre>
+        ${text}
+        </pre>
+        </body></html>
+        `);
     }
 });
 
