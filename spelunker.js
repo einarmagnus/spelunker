@@ -69,7 +69,8 @@ function spelunker(name = "blarf", roomFound = console.log) {
              * @param {string} xid the xid of the room to PUT
              * @param {string} cookie the cookie of the previous room (this is where we sneakily cheat)
              */
-            async function put(xid, cookie) {
+            async function put(xid, cookie, retries=3) {
+                if (retries === 0) return { error: "no more retries", status: 499, statusText: "no more retries"};
                 openRequests++;
                 try {
                     const result = await fetch(url, {
@@ -86,18 +87,14 @@ function spelunker(name = "blarf", roomFound = console.log) {
                             cookie: result.headers.get("Set-Cookie"),
                         };
                     } else {
-                        return {
-                            error: true,
-                            status: result.status,
-                            statusText: result.statusText,
-                        };
+                        console.log("error: ", result.status);
+                        // if it failed, just try again
+                        return put(xid, cookie, retries - 1);
                     }
                 } catch (e) {
-                    return {
-                        error: true,
-                        status: 499,
-                        statusText: e.message,
-                    };
+                    console.log("exception: ", e.message);
+                        // if it failed, just try again
+                        return put(xid, cookie, retries - 1);
                 } finally {
                     openRequests--;
                 }
